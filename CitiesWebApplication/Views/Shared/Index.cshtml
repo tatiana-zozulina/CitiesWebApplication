@@ -1,0 +1,13 @@
+﻿@model IEnumerable<CitiesWebApplication.Models.City>
+
+@{
+    ViewData["Title"] = "Cities";
+}
+
+<h2>Cities</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+@(await Html.RenderComponentAsync<CitiesWebApplication.Views.Home.CitiesList>(RenderMode.ServerPrerendered, new { Cities = Model }))

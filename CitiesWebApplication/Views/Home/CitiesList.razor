@@ -1,0 +1,43 @@
+﻿@using Microsoft.AspNetCore.Components
+@using CitiesWebApplication.Models
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Date
+            </th>
+            <th>
+                Population
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Cities)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.Date.ToString("dd.MM.yyyy")
+                </td>
+                <td>
+                    @item.Population
+                </td>
+                <td>
+                    <a href="City/Edit/@item.Id">Edit</a> |
+                    <a href="City/Delete/@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    [Parameter] public IEnumerable<City> Cities { get; set; }
+}

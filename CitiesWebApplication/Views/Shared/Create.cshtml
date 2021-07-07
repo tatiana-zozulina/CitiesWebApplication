@@ -1,0 +1,29 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<h2>Create</h2>
+@{
+    var city = ViewData["city"] as CitiesWebApplication.Models.City;
+    var currentDate = DateTime.Now.ToString("yyyy-MM-dd");
+}
+<form method="post">
+    <div>
+        <label>Name:</label>
+        <input type="text" name="Name" value="@city.Name" required ="required">
+    </div>
+    <div>
+        <label>Date:</label>
+        <input type="date" name="Date" value="@city.Date" required ="required" max="@currentDate">
+    </div>
+    <div>
+        <label>Population:</label>
+        <input type="number" min="0" name="Population" value="@city.Population" required ="required">
+    </div>
+    <div>
+        <a href="/">Home</a>
+        <input type="submit" value="Save" href ="/">
+    </div>
+</form>
+@{
+    
+}
