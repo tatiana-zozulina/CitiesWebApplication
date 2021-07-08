@@ -5,21 +5,19 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Owin;
-using Microsoft.Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CitiesWebApplication.Hubs;
 
-[assembly: OwinStartup(typeof(CitiesWebApplication.Startup))]
 namespace CitiesWebApplication
 {
     public class Startup
     {
         //public void Configuration(IAppBuilder app)
         //{
-        //    app.MapSignalR();
+        //    //app.MapSignalR();
         //}
 
         public Startup(IConfiguration configuration)
@@ -35,6 +33,7 @@ namespace CitiesWebApplication
             services.AddDbContext<ApiContext>(options => options.UseInMemoryDatabase(databaseName: "Cities"));
             services.AddControllersWithViews();
             services.AddServerSideBlazor();
+            services.AddSignalR();
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_3_0);
         }
 
@@ -64,6 +63,7 @@ namespace CitiesWebApplication
                     name: "default",
                     pattern: "{controller=City}/{action=Index}/{id?}");
                 endpoints.MapBlazorHub();
+                endpoints.MapHub<CityHub>("/cityHub");
             });
         }
 

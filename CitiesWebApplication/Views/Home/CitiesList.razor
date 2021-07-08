@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Components
 @using CitiesWebApplication.Models
 
-<table class="table">
+<table id="city-table" class="table">
     <thead>
         <tr>
             <th>
@@ -19,19 +19,19 @@
     <tbody>
         @foreach (var item in Cities)
         {
-            <tr>
-                <td>
+            <tr class="city-row" id="city-row-@item.Id">
+                <td class="city-name">
                     @item.Name
                 </td>
-                <td>
+                <td class="city-date">
                     @item.Date.ToString("dd.MM.yyyy")
                 </td>
-                <td>
+                <td class="city-poulation">
                     @item.Population
                 </td>
                 <td>
-                    <a href="City/Edit/@item.Id">Edit</a> |
-                    <a href="City/Delete/@item.Id">Delete</a>
+                    <a class="city-edit" href="City/Edit/@item.Id">Edit</a> |
+                    <a class="delete-city disabled" rel="@item.Id" href="City/Delete/@item.Id">Delete</a>
                 </td>
             </tr>
         }

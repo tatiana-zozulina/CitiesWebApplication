@@ -1,18 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CitiesWebApplication.Hubs;
 
 namespace CitiesWebApplication.Controllers
 {
     public class CityController : Controller
     {
+        private IHubContext<CityHub> hubContext;
         private ApiContext _context;
 
-        public CityController(ApiContext context)
+        public CityController(ApiContext context, IHubContext<CityHub> hubContext)
         {
             _context = context;
+            this.hubContext = hubContext;
         }
 
         [HttpGet]
@@ -46,13 +50,14 @@ namespace CitiesWebApplication.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(Models.City city)
+        public async Task<IActionResult> Edit(Models.City city)
         {
             if (CheckCity(city) && _context.Cities.Any(x => x.Id == city.Id))
             {
                 city.Name = MakeFirstLetterCapital(city.Name);
                 _context.Cities.Update(city);
                 _context.SaveChanges();
+                await hubContext.Clients.All.SendAsync("CityEdited", city.Id, city.Name, city.Date.Date.ToString("dd.MM.yyyy"), city.Population);
             }
             return RedirectToAction("Index");
         }
@@ -77,7 +82,7 @@ namespace CitiesWebApplication.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Models.City city)
+        public async Task<IActionResult> Create(Models.City city)
         {
             if (CheckCity(city))
             {
@@ -86,6 +91,7 @@ namespace CitiesWebApplication.Controllers
                 city.Name = MakeFirstLetterCapital(city.Name);
                 _context.Cities.Add(city);
                 _context.SaveChanges();
+                await hubContext.Clients.All.SendAsync("CityCreated", city.Id, city.Name, city.Date.Date.ToString("dd.MM.yyyy"), city.Population);
             }
             return RedirectToAction("Index");
         }

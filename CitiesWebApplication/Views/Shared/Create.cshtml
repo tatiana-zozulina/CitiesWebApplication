@@ -6,7 +6,7 @@
     var city = ViewData["city"] as CitiesWebApplication.Models.City;
     var currentDate = DateTime.Now.ToString("yyyy-MM-dd");
 }
-<form method="post">
+<form method="post" class="form-city edit-city">
     <div>
         <label>Name:</label>
         <input type="text" name="Name" value="@city.Name" required ="required">
@@ -21,7 +21,7 @@
     </div>
     <div>
         <a href="/">Home</a>
-        <input type="submit" value="Save" href ="/">
+        <input disabled type="submit" value="Save" href ="/">
     </div>
 </form>
 @{
