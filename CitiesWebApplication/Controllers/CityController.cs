@@ -10,13 +10,13 @@ namespace CitiesWebApplication.Controllers
 {
     public class CityController : Controller
     {
-        private IHubContext<CityHub> hubContext;
+        private IHubContext<CityHub> _hubContext;
         private ApiContext _context;
 
         public CityController(ApiContext context, IHubContext<CityHub> hubContext)
         {
             _context = context;
-            this.hubContext = hubContext;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -57,18 +57,19 @@ namespace CitiesWebApplication.Controllers
                 city.Name = MakeFirstLetterCapital(city.Name);
                 _context.Cities.Update(city);
                 _context.SaveChanges();
-                await hubContext.Clients.All.SendAsync("CityEdited", city.Id, city.Name, city.Date.Date.ToString("dd.MM.yyyy"), city.Population);
+                await _hubContext.Clients.All.SendAsync("CityEdited", city.Id, city.Name, city.Date.Date.ToString("dd.MM.yyyy"), city.Population);
             }
             return RedirectToAction("Index");
         }
 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var city = _context.Cities.Find(id);
             if (city != null)
             {
                 _context.Cities.Remove(city);
-                _context.SaveChangesAsync();
+                _context.SaveChanges();
+                await _hubContext.Clients.All.SendAsync("CityDeleted", id);
             }
             return RedirectToAction("Index");
         }
@@ -91,7 +92,7 @@ namespace CitiesWebApplication.Controllers
                 city.Name = MakeFirstLetterCapital(city.Name);
                 _context.Cities.Add(city);
                 _context.SaveChanges();
-                await hubContext.Clients.All.SendAsync("CityCreated", city.Id, city.Name, city.Date.Date.ToString("dd.MM.yyyy"), city.Population);
+                await _hubContext.Clients.All.SendAsync("CityCreated", city.Id, city.Name, city.Date.Date.ToString("dd.MM.yyyy"), city.Population);
             }
             return RedirectToAction("Index");
         }

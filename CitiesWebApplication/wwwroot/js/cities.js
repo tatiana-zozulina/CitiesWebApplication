@@ -32,20 +32,8 @@ $(document).ready(function () {
         );
     });
 
-    connection.start().then(function () {
-        $('#city-table .delete-city').removeClass('disabled');
-        $('.form-city input[type="submit"]').removeAttr('disabled');
-    }).catch(function (err) {
+    connection.start().catch(function (err) {
         return console.error(err.toString());
     });
 
-    $(document).on('click', '#city-table .delete-city', function (e) {
-        if ($(this).hasClass('disabled')) {
-            e.preventDefault();
-        } else {
-            connection.invoke("CityDelete", $(this).attr('rel')).catch(function (err) {
-                return console.error(err.toString());
-            });
-        }
-    });
 });

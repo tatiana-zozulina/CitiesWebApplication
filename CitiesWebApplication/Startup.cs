@@ -15,10 +15,6 @@ namespace CitiesWebApplication
 {
     public class Startup
     {
-        //public void Configuration(IAppBuilder app)
-        //{
-        //    //app.MapSignalR();
-        //}
 
         public Startup(IConfiguration configuration)
         {
